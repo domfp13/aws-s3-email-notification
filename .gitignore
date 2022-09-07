@@ -244,4 +244,10 @@ $RECYCLE.BIN/
 # AWS SAM
 .aws-sam
 
+# IDEA Jetbrains
+.idea/
+
+# Complied packaged-template
+packaged-template.yaml
+
 # End of https://www.gitignore.io/api/osx,linux,python,windows,pycharm,visualstudiocode

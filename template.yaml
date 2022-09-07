@@ -1,0 +1,39 @@
+# Created by Luis Enrique Fuentes Plata
+
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Application that sends email notifications based on a bucket event through lambda to SNS.
+
+Parameters:
+  BucketName:
+    Type: String
+    Default: YourBucketName
+
+Globals:
+  Function:
+    MemorySize: 128
+    Timeout: 100
+
+Resources:
+
+  NotificationSender:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Notification-Sender
+      Description: After a file is uploaded to an S3 bucket, this event causes a notification to be sent through SNS.
+      PackageType: Image
+    Metadata:
+      DockerTag: python-runner
+      DockerContext: ./EventNotification
+      Dockerfile: Dockerfile
+
+  ProcessingFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${NotificationSender}
+      RetentionInDays: 7
+
+Outputs:
+  NotificationSender:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt NotificationSender.Arn
